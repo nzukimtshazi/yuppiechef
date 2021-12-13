@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reviews;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class ReviewController extends Controller
 {
@@ -25,7 +26,7 @@ class ReviewController extends Controller
      */
     public function create()
     {
-        //
+        return view('review.create');
     }
 
     /**
@@ -36,7 +37,17 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $review = Reviews::where('description', '=', $request->description)->count();
+        if ($review > 0)
+            return redirect('review/create')->withInput()->with('danger', 'Review already exists');
+
+        $input = $request->all();
+        $reviews = new Reviews($input);
+
+        if ($reviews->save())
+            return Redirect::route('reviews')->with('success', 'Successfully added review!');
+        else
+            return Redirect::route('addReview')->withInput()->withErrors($reviews->errors());
     }
 
     /**
