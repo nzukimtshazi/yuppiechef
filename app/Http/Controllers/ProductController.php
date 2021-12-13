@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class ProductController extends Controller
 {
@@ -36,7 +37,17 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = Product::where('name', '=', $request->name)->count();
+        if ($product > 0)
+            return redirect('product/add')->withInput()->with('danger', 'Product already exists');
+
+        $input = $request->all();
+        $products = new Product($input);
+
+        if ($products->save())
+            return Redirect::route('products')->with('success', 'Successfully added product!');
+        else
+            return Redirect::route('addProduct')->withInput()->withErrors($products->errors());
     }
 
     /**

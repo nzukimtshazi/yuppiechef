@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,30 @@ use App\Http\Controllers\ReviewController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// route to list users
+Route::get('users', [UserController::class, 'index'])->name('users');
+
+// add user
+Route::get('user/add', [UserController::class, 'add'])->name('addUser');
+
+// store user
+Route::post('user/store', [UserController::class, 'store'])->name('storeUser');
+
+// edit user
+Route::get('user/edit/{id}', [UserController::class, 'edit'])->name('editUser');
+
+// update user
+Route::PATCH('user/update/{id}', [UserController::class, 'update'])->name('updateUser');
+
+// show the login form
+Route::get('login', [UserController::class, 'showLogin'])->name('login');
+
+// process the login form
+Route::post('login', array(UserController::class, 'doLogin'))->name('login');
+
+// process the logout
+Route::get('users/logout', [UserController::class, 'doLogout'])->name('logout');
 
 //route to list products
 Route::get('products', [ProductController::class, 'index'])->name('products');
