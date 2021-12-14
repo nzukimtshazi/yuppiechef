@@ -19,58 +19,61 @@
 
         <div class="panel-body">
             <table class="table table-striped" id="dataTable">
-            @if (count($reviews) > 0)
+                @if (count($reviews) > 0)
 
-                <!-- Table Headings -->
+                    <!-- Table Headings -->
                     <thead>
-                    <th>Description</th>
-                    <th>Rating</th>
-                    <th>Product</th>
-                    <th>User name</th>
-                    <th>Email</th>
-                    <th>Actions</th>
+                        <th>Description</th>
+                        <th>Rating</th>
+                        <th>Product</th>
+                        <th>User name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
                     </thead>
 
                     <!-- Table Body -->
                     <tbody>
-                    @foreach ($reviews as $review)
-                        <tr>
-                            <!-- Description -->
-                            <td class="table-text">
-                                <div>{{ $review->description }}</div>
-                            </td>
+                        @foreach ($reviews as $review)
+                            <tr>
+                                <!-- Description -->
+                                <td class="table-text">
+                                    <div>{{ $review->description }}</div>
+                                </td>
 
-                            <!-- Rating -->
-                            <td class="table-text">
-                                <div>{{ $review->rating }}</div>
-                            </td>
+                                <!-- Rating -->
+                                <td class="table-text">
+                                    <div>{{ $review->rating }}</div>
+                                </td>
 
-                            <!-- Product -->
-                            <td class="table-text">
-                                <div>{{ $review->product }}</div>
-                            </td>
+                                <!-- Product -->
+                                <td class="table-text">
+                                    <?php
+                                        $product = \App\Models\Product::where('id', '=', $review->product_id)->first();
+                                    ?>
+                                    <div>{{ $product->name }}</div>
+                                </td>
 
-                            <!-- User Name -->
-                            <td class="table-text">
-                                <div>{{ $review->user_named }}</div>
-                            </td>
+                                <!-- User Name -->
+                                <td class="table-text">
+                                    <div>{{ $review->user_name }}</div>
+                                </td>
 
-                            <!-- Email -->
-                            <td class="table-text">
-                                <div>{{ $review->email }}</div>
-                            </td>
+                                <!-- Email -->
+                                <td class="table-text">
+                                    <div>{{ $review->email }}</div>
+                                </td>
 
-                            <td>
-                                <div class="col-md-12">
-                                    <div class="col-md-6">
-                                        {!! Form::model($review, ['method' => 'GET', 'route' => ['editReview',
-                                            $review->id]]) !!}
-                                        <button type="submit" class="btn btn-sm btn-warning">Edit</button>
+                                <td>
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            {!! Form::model($review, ['method' => 'GET', 'route' => ['editReview',
+                                                $review->id]]) !!}
+                                            <button type="submit" class="btn btn-sm btn-warning">Edit</button>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 @else
                     <div class="alert alert-info" role="alert">No reviews available</div>

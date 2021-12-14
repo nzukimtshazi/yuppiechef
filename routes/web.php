@@ -56,6 +56,9 @@ Route::post('product/store', [ProductController::class, 'store'])->name('storePr
 // route to edit productID
 Route::get('product/edit/{id}', [ProductController::class, 'edit'])->name('editProduct');
 
+// route to update product
+Route::PATCH('product/update/{id}', [ProductController::class, 'update'])->name('updateProduct');
+
 // route to list reviews
 Route::get('reviews', [ReviewController::class, 'index'])->name('reviews');
 
@@ -67,3 +70,6 @@ Route::post('review/store', [ReviewController::class, 'store'])->name('storeRevi
 
 // route to edit reviewID
 Route::get('review/edit/{id}', [ReviewController::class, 'edit'])->name('editReview');
+
+// route to update review
+Route::PATCH('review/update/{id}', [ReviewController::class, 'update'])->name('updateReview');

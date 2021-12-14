@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Reviews;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class ReviewController extends Controller
@@ -26,7 +29,11 @@ class ReviewController extends Controller
      */
     public function create()
     {
-        return view('review.create');
+        $user = User::where('name', '=', Auth::user()->name)
+            ->where('email', '=', Auth::user()->email)->first();
+        $products = Product::where('id', '>', 0)->get();
+
+        return view('review.create', compact('user', 'products'));
     }
 
     /**
@@ -37,9 +44,8 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        $review = Reviews::where('description', '=', $request->description)->count();
-        if ($review > 0)
-            return redirect('review/create')->withInput()->with('danger', 'Review already exists');
+        if ($request->product_id == null)
+            return Redirect::route('createReview')->withInput()->with('danger', 'Please select the product to review');
 
         $input = $request->all();
         $reviews = new Reviews($input);
@@ -69,7 +75,12 @@ class ReviewController extends Controller
      */
     public function edit($id)
     {
-        //
+        $review = Reviews::find($id);
+        $products = Product::where('id', '>', 0)->get();
+        $product = Product::where('id', '=', $review->product_id)->first();
+        $pid = $product->id;
+        $name = $product->name;
+        return view('review.edit', compact('review', 'products', 'pid', 'name'));
     }
 
     /**
@@ -81,7 +92,18 @@ class ReviewController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $review = Reviews::find($id);
+
+        $review->description = $request->description;
+        $review->rating = $request->rating;
+        $review->user_name = $request->user_name;
+        $review->email = $request->email;
+        $review->product_id = $request->product_id;
+
+        if ($review->update())
+            return Redirect::route('reviews')->with('success', 'Successfully updated review');
+        else
+            return Redirect::route('editReview', [$id])->withInput()->withErrors($review->errors());
     }
 
     /**

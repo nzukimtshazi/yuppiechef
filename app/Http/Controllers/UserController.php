@@ -76,7 +76,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::where('id', '=', $id)->first();
+        return view('user.edit', compact('user'));
     }
 
     /**
@@ -88,7 +89,17 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::where('id', '=', $id)->first();
+        $user->name = $request->name . ' ' . $request->surname;
+        $user->email = $request->email;
+
+        if ($request->password != $user->password)
+            $user->password = Hash::make($request->password);
+
+        if ($user->update())
+            return Redirect::route('users')->with('success', 'Successfully updated user');
+        else
+            return Redirect::route('editUser', [$id])->withInput()->withErrors($user->errors());
     }
 
     /**
