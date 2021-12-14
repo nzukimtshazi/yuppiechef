@@ -15,16 +15,11 @@
                     <!-- if there are creation errors, they will show here -->
                     {!! HTML::ul($errors->all()) !!}
 
-                    {!! Form::model($user, ['method' => 'PATCH', 'route' => ['userUpdate', $user->id]]) !!}
+                    {!! Form::model($user, ['method' => 'PATCH', 'route' => ['updateUser', $user->id]]) !!}
 
                     <div class="form-group">
                         {!! Form::label('name', 'Name') !!}
                         {!! Form::text('name', $user->name, array('class' => 'form-control', 'required')) !!}
-                    </div>
-
-                    <div class="form-group">
-                        {!! Form::label('surname', 'Surname') !!}
-                        {!! Form::text('surname', $user->surname, array('class' => 'form-control', 'required')) !!}
                     </div>
 
                     <div class="form-group">

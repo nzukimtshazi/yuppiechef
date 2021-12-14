@@ -69,7 +69,8 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Product::find($id);
+        return view('product.edit', ['product' => $product]);
     }
 
     /**
@@ -81,7 +82,19 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+
+        $product_check = Product::where('name', '=', $request->name)->first();
+
+        if ($product_check && $product_check->id != $id)
+            return Redirect::route('editProduct', [$id])->withInput()->with('danger', 'Product already exists');
+
+        $product->name = $request->name;
+
+        if ($product->update())
+            return Redirect::route('products')->with('success', 'Successfully updated product!');
+        else
+            return Redirect::route('editProduct', [$id])->withInput()->withErrors($product->errors());
     }
 
     /**

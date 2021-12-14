@@ -6,34 +6,30 @@
 
     <!-- Add Product Form... -->
 
-    <div class="page-content d-flex align-items-center justify-content-center">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Add New Product</h3>
+                </div>
 
-        <div class="row w-100 mr-5 auth-page">
-            <div class="col-md-8 col-xl-6 mx-auto">
-                <div class="card">
-                    <div class="card-body">
+                <div class="panel-body">
 
-                        <h4 class="mb-3">Add New Product</h4>
+                    <!-- if there are creation errors, they will show here -->
+                    {!! HTML::ul($errors->all()) !!}
 
-                        <div class="col-md-8">
+                    {!! Form::open(array('route' => 'storeProduct', 'method'=>'POST','files'=>true)) !!}
 
-                            <!-- if there are creation errors, they will show here -->
-                            {!! HTML::ul($errors->all()) !!}
-
-                            {!! Form::open(array('route' => 'storeProduct', 'method'=>'POST','files'=>true)) !!}
-
-                            <div class="form-group form-group-sm">
-                                {!! Form::label('name', 'Name:') !!}
-                                {!! Form::text('name', Request::old('name'), array('class' => 'form-control form-control-sm
-                                input-sm', 'required')) !!}
-                            </div>
-
-                            <a href="{!!URL::route('products')!!}" class="btn btn-sm btn-secondary" role="button">Cancel</a>
-                            {!! Form::submit('Add', array('class' => 'btn btn-sm btn-info')) !!}
-
-                            {!! Form::close() !!}
-                        </div>
+                    <div class="form-group form-group-sm">
+                        {!! Form::label('name', 'Name:') !!}
+                        {!! Form::text('name', Request::old('name'), array('class' => 'form-control form-control-sm
+                        input-sm', 'required')) !!}
                     </div>
+
+                    <a href="{!!URL::route('products')!!}" class="btn btn-sm btn-secondary" role="button">Cancel</a>
+                    {!! Form::submit('Add', array('class' => 'btn btn-sm btn-info')) !!}
+
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>
