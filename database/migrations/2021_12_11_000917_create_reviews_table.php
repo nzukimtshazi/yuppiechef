@@ -23,10 +23,10 @@ class CreateReviewsTable extends Migration
                 $table->unsignedBigInteger('product_id');
                 $table->timestamps();
             });
+            Schema::table('reviews', function ($table) {
+                $table->foreign('product_id')->references('id')->on('products');
+            });
         }
-        Schema::table('reviews', function ($table) {
-            $table->foreign('product_id')->references('id')->on('products');
-        });
     }
 
     /**

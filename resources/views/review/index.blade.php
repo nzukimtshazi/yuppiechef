@@ -64,11 +64,13 @@
                                 </td>
 
                                 <td>
-                                    <div class="col-md-12">
-                                        <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4 col-md-2">
                                             {!! Form::model($review, ['method' => 'GET', 'route' => ['editReview',
-                                                $review->id]]) !!}
-                                            <button type="submit" class="btn btn-sm btn-warning">Edit</button>
+                                            $review->id]]) !!}
+                                            <button type="submit" class="btn btn-warning">
+                                                <i class="fa fa-trash"></i> Edit </button>
+                                            {!! Form::close() !!}
                                         </div>
                                     </div>
                                 </td>
