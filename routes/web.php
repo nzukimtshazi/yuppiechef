@@ -83,3 +83,9 @@ Route::get('report/averagereport', [ReportController::class, 'average'])->name('
 
 // route to display totals per rating
 Route::get('report/ratingsreport', [ReportController::class, 'ratings'])->name('ratingReport');
+
+// route to secure routes
+Route::group(['middleware' => ['secureRoutes']], function () {
+    Route::get('review/create', [ReviewController::class, 'create'])->name('createReview');
+    Route::get('review/edit/{id}', [ReviewController::class, 'edit'])->name('editReview');
+});
