@@ -73,3 +73,9 @@ Route::get('review/edit/{id}', [ReviewController::class, 'edit'])->name('editRev
 
 // route to update review
 Route::PATCH('review/update/{id}', [ReviewController::class, 'update'])->name('updateReview');
+
+// route to display total reviews per product
+Route::get('report/statsreport', [ReportController::class, 'stats'])->name('statsReport');
+
+// route to display average reviews per product
+Route::get('report/averagereport', [ReportController::class, 'average'])->name('averageReport');
