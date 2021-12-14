@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,3 +80,6 @@ Route::get('report/statsreport', [ReportController::class, 'stats'])->name('stat
 
 // route to display average reviews per product
 Route::get('report/averagereport', [ReportController::class, 'average'])->name('averageReport');
+
+// route to display totals per rating
+Route::get('report/ratingsreport', [ReportController::class, 'ratings'])->name('ratingReport');
