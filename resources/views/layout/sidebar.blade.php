@@ -20,8 +20,9 @@
                     </div>
                     <span class="label label-primary col-xs-12 col-sm-12 col-md-12" style="cursor: pointer;" data-toggle="collapse" data-target="#reportMenu">Reports</span>
                     <div id="reportMenu" class="collapse in">
-                        <li><a href="{!!URL::route('statsReport')!!}">Total Per Product</a></li>
+                        <li><a href="{!!URL::route('statsReport')!!}">Totals Per Product</a></li>
                         <li><a href="{!!URL::route('averageReport')!!}">Average Per Product</a></li>
+                        <li><a href="{!! URL::route('ratingReport') !!}">Totals Per Rating</a> </li>
                     </div>
                     <div><li><a href="{!!URL::route('logout')!!}">Logout</a></li></div>
                 </ul>

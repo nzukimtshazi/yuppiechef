@@ -12,8 +12,6 @@
     {!! HTML::script(URL::to('/').'/jquery/jquery-1.12.4.js') !!}
     {!! HTML::script(URL::to('/').'/jquery/jquery-ui-1.12.1/jquery-ui.min.js') !!}
     {!! HTML::style(URL::to('/').'/jquery/jquery-ui-1.12.1/jquery-ui.min.css') !!}
-    {!! HTML::script(URL::to('/').'/jquery/timepicker/js/jquery.timepicker.min.js') !!}
-    {!! HTML::style(URL::to('/').'/jquery/timepicker/css/jquery.timepicker.min.css') !!}
 
     {!! HTML::script(URL::to('/').'/bootstrap/js/bootstrap.js') !!}
     {!! HTML::style(URL::to('/').'/bootstrap/css/bootstrap.min.css') !!}
@@ -29,21 +27,10 @@
     {!! HTML::script(URL::to('/').'/DataTables/extensions/Buttons/js/buttons.html5.js') !!}
     {!! HTML::script(URL::to('/').'/DataTables/extensions/Buttons/js/buttons.flash.js') !!}
 
-    {!! HTML::script(URL::to('/').'/fullcalendar/js/moment.js') !!}
-    {!! HTML::script(URL::to('/').'/fullcalendar/js/fullcalendar.min.js') !!}
-    {!! HTML::style(URL::to('/').'/fullcalendar/css/fullcalendar.min.css') !!}
-
     {!! HTML::script(URL::to('/').'/ckeditor/ckeditor.js') !!}
-
-    {!! HTML::script(URL::to('/').'/owl-carousel/owl.carousel.js') !!}
-    {!! HTML::style(URL::to('/').'/owl-carousel/owl.carousel.css') !!}
-    {!! HTML::style(URL::to('/').'/owl-carousel/owl.theme.css') !!}
 
     {!! HTML::style(URL::to('/').'/bootstrap-select/css/bootstrap-select.css') !!}
     {!! HTML::script(URL::to('/').'/bootstrap-select/js/bootstrap-select.js') !!}
-
-    {!! HTML::style(URL::to('/').'/month-picker/src/MonthPicker.css') !!}
-    {!! HTML::script(URL::to('/').'/month-picker/src/MonthPicker.js') !!}
 
     {!! HTML::style(URL::to('/').'/select2/css/select2.min.css') !!}
     {!! HTML::script(URL::to('/').'/select2/js/select2.full.min.js') !!}
@@ -141,13 +128,6 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="footer">
-                @include('layout.footer')
-            </div>
-        </div>
-    </div>
 </div>
 
 <script type='text/javascript'>
@@ -161,205 +141,6 @@
             "aaSorting": [],
             'iDisplayLength': 100
         });
-        jQuery('#reportDataTable').DataTable( {
-            dom: 'Bfrtip',
-            buttons: [
-                {extend: 'print', footer: true},
-                {extend: 'excelHtml5', footer: true}
-            ],
-            'iDisplayLength': 100
-        });
-        $("#eventCarousel").owlCarousel({
-            jsonPath : '{!! URL::to('/') !!}/get-carousel-details',
-            jsonSuccess : customDataSuccess,
-            items : 3, //10 items above 1000px browser width
-            navigation : true,
-            navigationText: [
-                "<i class='icon-chevron-left icon-white'><</i>",
-                "<i class='icon-chevron-right icon-white'>></i>"
-            ]
-        });
-        $("#event_id:not(:hidden)").select2();
-        $("#client_id:not(:hidden)").select2();
-        populateVenues();
-    });
-    function customDataSuccess(data){
-        var content = "";
-        for(var i in data){
-            var courseName = data[i].title;
-            content += generateCarouselCell(data[i]);
-        }
-        $("#eventCarousel").html(content);
-    }
-    //for editing venues on a selected city
-    $("#city_id").on("change", function(e) { populateVenues(); })
-    function populateVenues()
-    {
-        var val = $('#venue_id').val();
-        $('#venue_id').find('option').remove().end();
-        var city_id = $('#city_id option:selected').attr('value');
-        var info = $.get("{{url('ajax-city-venue')}}"+"/"+city_id);
-        info.done(function(data) {
-            $('#venue_id').append('<option value="">None</option>');
-            $('#venue_id').append('<option value="1">CP</option>');
-            $.each(data,function(index,venueObj){
-                $('#venue_id').append('<option value="'+venueObj.id+'">'+venueObj.name+'</option>');
-            });
-            $('#venue_id').val(val);
-        });
-        info.fail(function(){
-        });
-    }
-    //for editing carousel
-    function generateCarouselCell(data)
-    {
-        var strOutput = "";
-        strOutput =  "<div class='owl-item' >" +
-                "<div class='item col-md-offset-1' data-toggle='tooltip' title='"+data.notes+" '  >" +
-                "<table class='table table-striped table-responsive table-bordered'>" +
-                "<thead>" +
-                "<tr bgcolor='" + data.backgroundColor +"'>" +
-                "<th>" +
-                "<font color='"+data.textColor+"'>" + data.title + "</font>";
-        if (data.buttonVisible == true) {
-            strOutput +=  "<button onclick = carouselEventClick('" + escape(data.eventId) + "','" + escape(data.notes) + "') class='pull-right glyphicon glyphicon-tag' style='background-color: Transparent;border: none; ' data-toggle='modal' data-target='#notesModal'></button> ";
-        }
-        strOutput +=   "</th>" +
-                "</tr>" +
-                "</thead>" +
-                "<tbody>" +
-                "<tr>" +
-                "<td>" +
-                data.eventTime + " - " + data.eventEndTime +
-                "<br>Venue Capacity : " + data.venueCapacity +
-                "<br>Course Capacity : " + data.courseCapacity +
-                "</td>" +
-                "</tr>" +
-                "<tr>" +
-                "<td>" +
-                "Booked : " + data.noBooked + "<br>"+
-                "Available : " + data.availableSeats +
-                "</td>" +
-                "</tr>" +
-                "</tbody>" +
-                "</table>" +
-                "</div>" +
-                "</div>";
-        return strOutput;
-    }
-    // for event notes click
-    function carouselEventClick(eventId,notes)
-    {
-        jQuery("#modalEvent_id").val(unescape(eventId));
-        jQuery("#modalNotes").val(unescape(notes));
-    }
-    //for datepicker
-    $(function () {
-        $('.datepicker').datepicker({dateFormat: 'dd/mm/yy'}) ;
-    });
-    //for timepicker
-    $(function () {
-        $('.timepicker').timepicker({timeFormat: 'HH:mm'});
-    });
-    //for booking events
-    $('#course_id').on('change',function(e) {
-        clearEventBookingInfo();
-        getCourseEvents();
-    });
-    function getCourseEvents()
-    {
-        if($('#course_id.allEventOption').length)
-        {
-            //if allevent options control found, do not also populate
-            return;
-        }
-        $('#event_id').find('option').remove().end();
-        var course_id = $('#course_id option:selected').attr('value');
-        var info = $.get("{{url('ajax-course-event')}}"+"/"+course_id);
-        info.done(function(data) {
-            $.each(data,function(index,eventObj){
-                $('#event_id').append('<option value="'+eventObj.id+'">'+eventObj.description+'</option>');
-            });
-            getEventBookingInfo();
-        });
-        info.fail(function(){
-            //alert('ok');
-        });
-    }
-    $('#course_id.allEventOption').on('change',function(e) {
-        $('#event_id').find('option').remove().end();
-        var course_id = $('#course_id option:selected').attr('value');
-        var info = $.get("{{url('ajax-course-event')}}"+"/"+course_id);
-        info.done(function(data) {
-            $('#event_id').append('<option value="0">All</option>');
-            $.each(data,function(index,eventObj){
-                $('#event_id').append('<option value="'+eventObj.id+'">'+eventObj.description+'</option>');
-            });
-        });
-        info.fail(function(){
-            //alert('ok');
-        });
-    });
-    //for editing events details
-    $("#event_id").on("change", function(e) { getEventBookingInfo(); })
-    function getEventBookingInfo()
-    {
-        var event_id = $('#event_id option:selected').attr('value');
-        var info = $.get("{{url('ajax-event-details')}}"+"/"+event_id);
-        info.done(function(data) {
-            data = JSON.parse(data);
-            $('#city_id').val(data.cityName);
-            $('#venue_id').val(data.venueName);
-            $('#capacity').val(data.venueCapacity);
-            $('#course_capacity').val(data.courseCapacity);
-            $('#instructor_id').val(data.userInstructor);
-            $('#available_openings').val(data.capacity);
-        });
-        info.fail(function(){
-            //alert('ok');
-        });
-    }
-    function clearEventBookingInfo()
-    {
-        $('#city_id').val("");
-        $('#venue_id').val("");
-        $('#capacity').val("");
-        $('#course_capacity').val("");
-        $('#instructor_id').val("");
-        $('#available_openings').val("");
-    }
-
-    $( function() {
-        $( "#clientAuto" ).autocomplete({
-            minLength: 3,
-            dataType: 'text',
-            source: function (request, response) {
-                $.ajax({
-                    url: "{{URL('getClientData')}}",
-                    data: {
-                        clientAuto: jQuery("#clientAuto").val(),
-                    },
-                    error: function (data) { console.log('Error!'); },
-                    success: function (data) {
-                        response(JSON.parse(data));
-                    }
-                });
-            },
-            focus: function( event, ui ) {
-                $( "#clientAuto" ).val( ui.item.label );
-                return false;
-            },
-            select: function( event, ui ) {
-                $( "#client_id" ).val( ui.item.id );
-                $( "#clientAuto" ).val( ui.item.label );
-                return false;
-            }
-        })
-                .autocomplete( "instance" )._renderItem = function( ul, item ) {
-            return $( "<li>" )
-                    .append( "<div>" + item.label + " (t/a) " + item.name + "</div>" )
-                    .appendTo( ul );
-        };
     });
 </script>
 </body>
